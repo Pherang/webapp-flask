@@ -15,4 +15,5 @@ def index():
             'body': 'The Avengers movie was ok'
         }
     ]
-    return render_template('index.html', title="Superblog", posts=posts, user=user)
+    return render_template('index.html', 
+            title="Superblog", posts=posts, user=user)
