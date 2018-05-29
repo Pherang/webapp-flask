@@ -1,6 +1,6 @@
 from app import db
 
-# 
+# User clas inherits from the SQLAlchemy.Model class
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
