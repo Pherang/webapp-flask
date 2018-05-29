@@ -1,4 +1,5 @@
 from app import db
+from datetime import datetime
 
 # User clas inherits from the SQLAlchemy.Model class
 class User(db.Model):
