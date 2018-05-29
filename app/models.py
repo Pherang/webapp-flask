@@ -1,5 +1,6 @@
 from app import db
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # User clas inherits from the SQLAlchemy.Model class
 class User(db.Model):
@@ -7,10 +8,18 @@ class User(db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(12), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+
     # An inconcsistency with SQLAlchemy is that
-    # below the model is referenced by Post, the name of the class representing the table
-    # in the db.ForeignKey() call, for user.id the table is referenced by its actual table name user,
+    # in the db.relationship() call the model is referenced by Post, the name of the class representing the table
+    # in the db.ForeignKey() call in Post, the table user.id is referenced by its actual table name user,
+
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     # We've defined our own repr() method below
     # this allows us to control what is returned when repr() is called.
