@@ -1,9 +1,11 @@
-from app import db
+from app import db, login
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
-# User clas inherits from the SQLAlchemy.Model class
-class User(db.Model):
+# User clas inherits from the SQLAlchemy.Model class and 
+# four mixins from UserMixin required for use with Flask-Login
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(12), index=True, unique=True)
@@ -34,3 +36,12 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<post {}>'.format(self.body)
+
+
+# Flask-Login requires a user_loader function to work because
+# it doesn't do anything with databases.
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
+
+
