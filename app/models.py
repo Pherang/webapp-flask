@@ -5,11 +5,18 @@ from flask_login import UserMixin
 from hashlib import md5
 
 # User clas inherits from the SQLAlchemy.Model class and 
+
+followers = db.Table('followers', 
+    db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('followed_id', db.Integer, db.ForeignKey('user.id')),
+)
+
+
 # four mixins from UserMixin required for use with Flask-Login
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(12), index=True, unique=True)
+    email = db.Column(db.String(12), index=True, unique=True) 
     password_hash = db.Column(db.String(128))
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
@@ -19,6 +26,13 @@ class User(UserMixin, db.Model):
     # in the db.ForeignKey() call in Post, the table user.id is referenced by its actual table name user,
 
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+
+    # The many to many relationship to other users
+    followed = db.relationship(
+        'User', secondary=followers, #secondary is the association table
+        primaryjoin=(followers.c.follower_id == id), # join the User parent class to the table
+        secondaryjoin=(followers.c.followed_id == id), # links 'User' in this call to the table
+        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic') # how this relationship is accessed from the right/followed side
     
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -43,6 +57,9 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<post {}>'.format(self.body)
+
+# association table without any other attributes other than foreign keys
+# no need to create a model out of it
 
 # Flask-Login requires a user_loader function to work because
 # it doesn't do anything with databases.
