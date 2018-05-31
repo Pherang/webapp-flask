@@ -8,7 +8,7 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm
 
 # required to handle logins and sessions for our login view function
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 
 @app.route('/')

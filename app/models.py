@@ -2,6 +2,7 @@ from app import db, login
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from hashlib import md5
 
 # User clas inherits from the SQLAlchemy.Model class and 
 # four mixins from UserMixin required for use with Flask-Login
@@ -10,6 +11,8 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(12), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+    about_me = db.Column(db.String(140))
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
     # An inconcsistency with SQLAlchemy is that
     # in the db.relationship() call the model is referenced by Post, the name of the class representing the table
@@ -22,7 +25,11 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-
+    
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
+                digest, size)
     # We've defined our own repr() method below
     # this allows us to control what is returned when repr() is called.
     def __repr__(self):
@@ -37,11 +44,8 @@ class Post(db.Model):
     def __repr__(self):
         return '<post {}>'.format(self.body)
 
-
 # Flask-Login requires a user_loader function to work because
 # it doesn't do anything with databases.
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
-
