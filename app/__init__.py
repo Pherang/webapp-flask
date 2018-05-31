@@ -17,7 +17,6 @@ login.login_view = 'login' # Here 'login' refers to the endpoint handles logins
 db = SQLAlchemy(app)
 migate = Migrate(app, db)
 
-
 # app in this case is our package folder and not the variable above
 # The variable above is an instance of flask
 from app import routes, models
