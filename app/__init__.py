@@ -5,7 +5,8 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 
 import logging
-from logging.handlers import SMTPHandler
+from logging.handlers import SMTPHandler, RotatingFileHandler
+import os
 
 app = Flask(__name__)
 
@@ -14,8 +15,7 @@ app.config.from_object(Config)
 
 # Initialize login and session management
 login = LoginManager(app)
-login.login_view = 'login' # Here 'login' refers to the endpoint handles logins
-
+login.login_view = 'login' # Here 'login' refers to the endpoint handles logins 
 # Setup database and flask-migration
 db = SQLAlchemy(app)
 migate = Migrate(app, db)
@@ -37,6 +37,18 @@ if not app.debug:
         mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
 
+if not app.debug:
+
+    if not os.path.exists('logs'):
+        os.mkdir('logs')
+    file_handler = RotatingFileHandler('logs/microblog.log', maxBytes=10240,
+                                        backupCount=10)
+    file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+    file_handler.setLevel(logging.INFO)
+    app.logger.addHandler(file_handler)
+
+    app.logger.setLevel(logging.INFO)
+    app.logger.info('Microblog Startup')
 
 # app in this case is our package folder and not the variable above
 # The variable above is an instance of flask
