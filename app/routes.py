@@ -6,7 +6,7 @@ from app import app, db
 
 # Imports the LoginForm class from the app/forms.py module
 # app is the package folder
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm
 
 # required to handle logins and sessions for our login view function
 from flask_login import current_user, login_user, logout_user, login_required
@@ -106,4 +106,3 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile',
                             form=form)
-
