@@ -1,17 +1,17 @@
 from datetime import datetime, timedelta
-import unitteset
+import unittest
 from app import app, db
 from app.models import User, Post
 
 class UserModelCase(unittest.TestCase):
     def setUp(self):
         # 'sqlite://' causes SQLAlchemy to use an in memory db for testing
-        app.config('SQLALCHEMY_DATABASE_URI'] = 'sqlite://' 
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://' 
         db.create_all()
 
     def tearDown(self):
         db.session.remove()
-        db.drop_all
+        db.drop_all()
 
     def test_password_hash(self):
         u = User(username='susan')
@@ -21,8 +21,8 @@ class UserModelCase(unittest.TestCase):
     
     def test_avatar(self):
         u = User(username='john', email='john@example.com')
-        self.assertEqual(u.avatar(128), ('https://gravatar.com/avatar/'
-                                         'd4c74594d841139328695756648b6bd6'
+        self.assertEqual(u.avatar(128), ('https://www.gravatar.com/avatar/'
+                                        'd4c74594d841139328695756648b6bd6'
                                          '?d=identicon&s=128'))
     
     def test_follow(self):
@@ -37,7 +37,7 @@ class UserModelCase(unittest.TestCase):
         self.assertTrue(u1.is_following(u2))
         self.assertEqual(u1.followed.count(), 1)
         self.assertEqual(u1.followed.first().username, 'susan')
-        self.assertEqual(u2.followers.count(), 2)
+        self.assertEqual(u2.followers.count(), 1)
         self.assertEqual(u2.followers.first().username, 'john')
         
         u1.unfollow(u2)
@@ -79,9 +79,9 @@ class UserModelCase(unittest.TestCase):
         f3 = u3.followed_posts().all()
         f4 = u4.followed_posts().all()
         self.assertEqual(f1, [p2, p4, p1])
-        self.assertEqual(r2, [p2, p3])
+        self.assertEqual(f2, [p2, p3])
         self.assertEqual(f3, [p3, p4])
         self.assertEqual(f4, [p4])
         
-if __name__ = '__main__':
+if __name__ == '__main__':
     unittest.main(verbosity=2)

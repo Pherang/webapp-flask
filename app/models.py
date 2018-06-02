@@ -32,7 +32,7 @@ class User(UserMixin, db.Model):
     followed = db.relationship(
         'User', secondary=followers, #secondary is the association table
         primaryjoin=(followers.c.follower_id == id), # join the User parent class to the table
-        secondaryjoin=(followers.c.followed_id == id), # links 'User' in this call to the table
+        secondaryjoin=(followers.c.followed_id == id), # links right-side 'User' in this call to the table
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic') # how this relationship is accessed from the right/followed side
     
     def set_password(self, password):

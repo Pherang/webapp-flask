@@ -8,13 +8,18 @@
         <h1> User: {{ user.username }}</h1>
         {% if user.about_me %}<p>About Me: {{ user.about_me }}</p>{% endif %}
         {% if user.last_seen %}<p><b>Last Seen:</b> {{ user.last_seen }}</p>{% endif %}
-        {% if user == current_user %} <!-- Here it checks if the user that the page is rendered for is the user in the current session -->
-      </td>
+        <p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</p>
+              </td>
     </tr>
     <tr>
       <td></td>
       <td>
+        {% if user == current_user %} <!-- Here it checks if the user that the page is rendered for is the user in the current session -->
         <p><a href="{{ url_for('edit_profile')}}">Edit your profile</a></p>
+        {% elif not current_user.is_following(user) %}
+        <p><a href="{{ url_for('follow', username=user.username) }}">Follow</a></p>
+        {% else %}
+        <p><a href="{{ url_for('unfollow', username=user.username) }}">Unfollow</a></p>
         {% endif %}
       </td>
     </tr>
