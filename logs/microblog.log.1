@@ -1,13 +1,4 @@
-2018-05-31 12:26:36,008 ERROR: Exception on /edit_profile [POST] [in /home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/flask/app.py:1761]
-Traceback (most recent call last):
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1193, in _execute_context
-    context)
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/engine/default.py", line 507, in do_execute
-    cursor.execute(statement, parameters)
-sqlite3.IntegrityError: UNIQUE constraint failed: user.username
-
-The above exception was the direct cause of the following exception:
-
+2018-06-02 16:42:32,987 ERROR: Exception on /index [GET] [in /home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/flask/app.py:1761]
 Traceback (most recent call last):
   File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/flask/app.py", line 2292, in wsgi_app
     response = self.full_dispatch_request()
@@ -23,76 +14,100 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/flask_login/utils.py", line 261, in decorated_view
     return func(*args, **kwargs)
-  File "/home/coder/programming/python/migelgrinberg/microblog/app/routes.py", line 101, in edit_profile
-    db.session.commit()
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/orm/scoping.py", line 153, in do
-    return getattr(self.registry(), name)(*args, **kwargs)
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 943, in commit
-    self.transaction.commit()
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 467, in commit
-    self._prepare_impl()
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 447, in _prepare_impl
-    self.session.flush()
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 2254, in flush
-    self._flush(objects)
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 2380, in _flush
-    transaction.rollback(_capture_exception=True)
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/util/langhelpers.py", line 66, in __exit__
-    compat.reraise(exc_type, exc_value, exc_tb)
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/util/compat.py", line 187, in reraise
-    raise value
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/orm/session.py", line 2344, in _flush
-    flush_context.execute()
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/orm/unitofwork.py", line 391, in execute
-    rec.execute(self)
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/orm/unitofwork.py", line 556, in execute
-    uow
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/orm/persistence.py", line 177, in save_obj
-    mapper, table, update)
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/orm/persistence.py", line 768, in _emit_update_statements
-    execute(statement, multiparams)
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 948, in execute
-    return meth(self, multiparams, params)
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/sql/elements.py", line 269, in _execute_on_connection
-    return connection._execute_clauseelement(self, multiparams, params)
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1060, in _execute_clauseelement
-    compiled_sql, distilled_params
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1200, in _execute_context
-    context)
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1413, in _handle_dbapi_exception
-    exc_info
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/util/compat.py", line 203, in raise_from_cause
-    reraise(type(exception), exception, tb=exc_tb, cause=cause)
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/util/compat.py", line 186, in reraise
+  File "/home/coder/programming/python/migelgrinberg/microblog/app/routes.py", line 41, in index
+    title="Superblog", posts=posts, form=form)
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/flask/templating.py", line 134, in render_template
+    return _render(ctx.app.jinja_env.get_or_select_template(template_name_or_list),
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/environment.py", line 869, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/environment.py", line 830, in get_template
+    return self._load_template(name, self.make_globals(globals))
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/environment.py", line 804, in _load_template
+    template = self.loader.load(self, name, globals)
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/loaders.py", line 125, in load
+    code = environment.compile(source, name, filename)
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/environment.py", line 591, in compile
+    self.handle_exception(exc_info, source_hint=source_hint)
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/environment.py", line 780, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/_compat.py", line 37, in reraise
     raise value.with_traceback(tb)
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/engine/base.py", line 1193, in _execute_context
-    context)
-  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/sqlalchemy/engine/default.py", line 507, in do_execute
-    cursor.execute(statement, parameters)
-sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: user.username [SQL: 'UPDATE user SET username=?, about_me=? WHERE user.id = ?'] [parameters: ('susan', 'asspoo', 5)] (Background on this error at: http://sqlalche.me/e/gkpj)
-2018-05-31 15:55:09,361 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-05-31 15:55:30,377 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-05-31 16:32:07,409 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-05-31 17:23:06,213 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-05-31 18:29:55,042 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-05-31 18:30:26,993 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-01 12:35:28,144 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-01 12:35:31,985 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 07:48:16,689 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 07:55:26,530 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 08:00:45,586 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 08:02:36,375 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 08:06:07,814 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 08:08:39,305 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 08:09:19,348 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 08:09:59,256 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 08:10:31,446 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 09:35:32,591 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 09:36:39,093 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 09:37:48,897 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 09:38:28,344 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 09:38:44,740 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 09:39:18,074 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 09:44:11,596 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 09:54:28,054 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
-2018-06-02 16:42:30,236 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
+  File "/home/coder/programming/python/migelgrinberg/microblog/app/templates/index.html", line 9, in template
+    {{ form.post(cols=32, rows=4 }}<br>
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/environment.py", line 497, in _parse
+    return Parser(self, source, name, encode_filename(filename)).parse()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 901, in parse
+    result = nodes.Template(self.subparse(), lineno=1)
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 883, in subparse
+    rv = self.parse_statement()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 130, in parse_statement
+    return getattr(self, 'parse_' + self.stream.current.value)()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 268, in parse_block
+    node.body = self.parse_statements(('name:endblock',), drop_needle=True)
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 165, in parse_statements
+    result = self.subparse(end_tokens)
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 875, in subparse
+    add_data(self.parse_tuple(with_condexpr=True))
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 620, in parse_tuple
+    args.append(parse())
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 432, in parse_expression
+    return self.parse_condexpr()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 437, in parse_condexpr
+    expr1 = self.parse_or()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 450, in parse_or
+    left = self.parse_and()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 459, in parse_and
+    left = self.parse_not()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 470, in parse_not
+    return self.parse_compare()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 474, in parse_compare
+    expr = self.parse_math1()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 496, in parse_math1
+    left = self.parse_concat()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 507, in parse_concat
+    args = [self.parse_math2()]
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 517, in parse_math2
+    left = self.parse_pow()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 528, in parse_pow
+    left = self.parse_unary()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 547, in parse_unary
+    node = self.parse_postfix(node)
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 676, in parse_postfix
+    node = self.parse_call(node)
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 785, in parse_call
+    value = self.parse_expression()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 432, in parse_expression
+    return self.parse_condexpr()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 437, in parse_condexpr
+    expr1 = self.parse_or()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 450, in parse_or
+    left = self.parse_and()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 459, in parse_and
+    left = self.parse_not()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 470, in parse_not
+    return self.parse_compare()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 474, in parse_compare
+    expr = self.parse_math1()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 496, in parse_math1
+    left = self.parse_concat()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 507, in parse_concat
+    args = [self.parse_math2()]
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 517, in parse_math2
+    left = self.parse_pow()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 528, in parse_pow
+    left = self.parse_unary()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 546, in parse_unary
+    node = self.parse_primary()
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/parser.py", line 572, in parse_primary
+    next(self.stream)
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/lexer.py", line 359, in __next__
+    self.current = next(self._iter)
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/lexer.py", line 562, in wrap
+    for lineno, token, value in stream:
+  File "/home/coder/programming/python/migelgrinberg/microblog/env/lib/python3.6/site-packages/jinja2/lexer.py", line 690, in tokeniter
+    filename)
+jinja2.exceptions.TemplateSyntaxError: unexpected '}', expected ')'
+2018-06-02 16:45:45,479 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
+2018-06-02 17:31:22,243 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
+2018-06-02 17:33:27,840 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
+2018-06-02 17:36:48,558 INFO: Microblog Startup [in /home/coder/programming/python/migelgrinberg/microblog/app/__init__.py:51]
