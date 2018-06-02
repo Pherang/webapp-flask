@@ -24,6 +24,7 @@ class User(UserMixin, db.Model):
     # An inconcsistency with SQLAlchemy is that
     # in the db.relationship() call the model is referenced by Post, the name of the class representing the table
     # in the db.ForeignKey() call in Post, the table user.id is referenced by its actual table name user,
+    # Best thing to do is read the API to see what is required.
 
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
@@ -44,6 +45,25 @@ class User(UserMixin, db.Model):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
                 digest, size)
+    
+    def follow(self, user):
+        if not self.is_following(user):
+            self.followed.append(user)
+
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.followed.remove(user)
+
+    def is_following(self, user):
+        return self.followed.filter(
+            followers.c.followed_id == user.id).count() > 0
+
+    def followed_posts(self):
+        return Post.query.join(
+            followers, (followers.c.followed_id == Post.user_id)).filter(
+                followers.c.follower_id == self.id).order_by(
+                    Post.timestamp.desc())
+
     # We've defined our own repr() method below
     # this allows us to control what is returned when repr() is called.
     def __repr__(self):
