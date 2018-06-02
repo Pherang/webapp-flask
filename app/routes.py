@@ -5,11 +5,11 @@ from werkzeug.urls import url_parse
 from app import app, db
 # Imports the LoginForm class from the app/forms.py module
 # app is the package folder
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm
 
 # required to handle logins and sessions for our login view function
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User
+from app.models import User, Post
 
 from datetime import datetime
 
@@ -21,21 +21,24 @@ def before_request():
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 @login_required # this is initialized in app/__init__.py
 def index():
-    user = {'username': 'Kyoto'}
-    posts = [
-        { 'author': {'username': 'John'}, 'body': 'Beautiful day in Toronto'
-        },
-        {
-            'author': {'username:' 'Susan'},
-            'body': 'The Avengers movie was ok'
-        }
-    ]
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(body=form.post.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post is now live!')
+        # Note the redirect to index. It's standard practice. It fixes
+        # the refresh command as well, since it will resubmit form
+        # going to another page sets th refresh command to get the page.
+        return redirect(url_for('index'))
+
+    posts = current_user.followed_posts().all()
     return render_template('index.html', 
-            title="Superblog", posts=posts)
+            title="Superblog", posts=posts, form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
