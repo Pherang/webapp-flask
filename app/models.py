@@ -3,6 +3,9 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
+from time import time
+import jwt
+from app import app
 
 # User clas inherits from the SQLAlchemy.Model class and 
 
@@ -63,8 +66,25 @@ class User(UserMixin, db.Model):
         followed = Post.query.join(
             followers, (followers.c.followed_id == Post.user_id)).filter(
                 followers.c.follower_id == self.id)
+        # Run another query on the database for posts written
+        # by the user and join it to followed
         own = Post.query.filter_by(user_id=self.id)    
         return followed.union(own).order_by(Post.timestamp.desc())
+    
+    def get_reset_password_token(self, expires_in=600):
+        # HS256 is a symmetrical algorithm. The secret key must be protected otherwise others will be able to create tokens
+        return jwt.encode(
+            {'reset_password': self.id, 'exp': time() + expires_in},
+            app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
+
+    @staticmethod
+    def verify_reset_password_token(token):
+        try:
+            id = jwt.decode(token, app.config['SECRET_KEY'],
+                    algorithms=['HS256'])['reset_password']
+        except:
+            return
+        return User.query.get(id)
 
     # We've defined our own repr() method below
     # this allows us to control what is returned when repr() is called.
