@@ -3,6 +3,7 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_mail import Mail
 
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
@@ -12,6 +13,9 @@ app = Flask(__name__)
 
 # Get all of our configuration variables from our config module
 app.config.from_object(Config)
+
+# Setup Flask Mail
+mail = Mail(app)
 
 # Initialize login and session management
 login = LoginManager(app)
