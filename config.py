@@ -16,4 +16,4 @@ class Config(object):
     ADMINS = ['pherangdev@gmail.com']
 
     # Posts management
-    POSTS_PER_PAGE = 3
+    POSTS_PER_PAGE = 6
