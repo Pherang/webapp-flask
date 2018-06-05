@@ -17,3 +17,6 @@ class Config(object):
 
     # Posts management
     POSTS_PER_PAGE = 6
+    
+    # Languages for Babel translation
+    LANGUAGES = ['en', 'es']
