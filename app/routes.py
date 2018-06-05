@@ -1,5 +1,6 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, g
 from werkzeug.urls import url_parse
+from flask_babel import get_locale
 
 # Imports the app class was assigned Flask from the app folder
 from app import app, db
@@ -19,6 +20,7 @@ from datetime import datetime
 def before_request():
     # a reference to current_user will open a session to the database.
     # which is why db.session.add() isn't here.
+    g.locale = str(get_locale())
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
