@@ -4,3 +4,4 @@ env
 messages.pot
 messages.mo
 initcontext.sh
+appvars.txt
