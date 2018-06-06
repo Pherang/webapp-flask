@@ -11,7 +11,6 @@
       </a>
       said {{ moment(post.timestamp).fromNow() }}:
       <br><span id="post{{ post.id }}">{{ post.body }}
-      {{ post.language }}
       </span>
       <!-- If the language was detected AND it isn't the same as the user's browser language -->
       {% if post.language and post.language != g.locale %}
