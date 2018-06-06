@@ -11,6 +11,11 @@
       </a>
       said {{ moment(post.timestamp).fromNow() }}:
       <br>{{ post.body }}
+      <!-- If the language was detected AND it isn't the same as the user's browser language -->
+      {% if post.language and post.language != g.locale %}
+      <br><br>
+        <a href="#">{{ _('Translate') }}</a>
+      {% endif %}
     </td>
   </tr>
 </table>
