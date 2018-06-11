@@ -1,17 +1,17 @@
 import json, uuid
 import requests # HTTP client
 from flask_babel import _
-from app import app
+from flask import current_app
 
 # Had to do a bit of my own research as the Microsoft api has changed.
 # v2 was recently deprecated so I had to change the code to work with v3
 def translate(text, source_language, dest_language):
-    if 'MS_TRANSLATOR_KEY' not in app.config or \
-            not app.config['MS_TRANSLATOR_KEY']:
+    if 'MS_TRANSLATOR_KEY' not in current_app.config or \
+            not current_app.config['MS_TRANSLATOR_KEY']:
         return _('Error: the translation service is not configured.')
 
     headers = {
-        'Ocp-Apim-Subscription-Key': app.config['MS_TRANSLATOR_KEY'],
+        'Ocp-Apim-Subscription-Key': current_app.config['MS_TRANSLATOR_KEY'],
         'Content-type': 'application/json',
         'X-ClientTraceId': str(uuid.uuid4())
          }
