@@ -5,3 +5,5 @@ messages.pot
 messages.mo
 initcontext.sh
 appvars.txt
+.env
+test.log

@@ -10,8 +10,9 @@ class TestConfig(Config):
 
 class UserModelCase(unittest.TestCase):
     def setUp(self):
-        # 'sqlite://' causes SQLAlchemy to use an in memory db for testing
         self.app = create_app(TestConfig)
+        print('Config is ', TestConfig)
+        print('App is ',self.app)
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
