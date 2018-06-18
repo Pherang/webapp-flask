@@ -6,6 +6,7 @@ from hashlib import md5
 from time import time
 import jwt
 from flask import current_app
+from app.search import add_to_index, remove_from_index, query_index
 
 # User clas inherits from the SQLAlchemy.Model class and 
 
@@ -13,6 +14,41 @@ followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id')),
 )
+
+class SearchableMixin(object):
+    @classmethod
+    def search(cls, expression, page, per_page):
+        ids, total = query_index(cls.__tablename__, expression, page, per_page)
+        if total == 0:
+            return cls.query.filter_by(id=0), 0
+        when = []
+        for i in range(len(ids)):
+            when.append((ids[i], i))
+        return cls.query.filter(cls.id.in_(ids)).order_by(
+            db.case(when, value=cls.id)), total
+
+    @classmethod
+    def before_commit(cls, session):
+        session._changes = {
+            'add': [obj for obj in session.new if isinstance(obj, cls)],
+            'update': [obj for obj in session.dirty if isinstance(obj, cls)],
+            'delete': [obj for obj in session.deleted if isinstance(obj, cls)]
+            }
+
+    @classmethod
+    def after_commit(cls, session):
+        for obj in session._changes['add']:
+            add_to_index(cls.__tablename__, obj)
+        for obj in session._changes['update']:
+            add_to_index(cls.__tablename__, obj)
+        for obj in session._changes['delete']:
+            remove_from_index(cls.__tablename__, obj)
+        session._changes = None
+
+    @classmethod
+    def reindex(cls):
+        for obj in cls.query:
+            add_to_index(cls.__tablename__, obj)
 
 
 # four mixins from UserMixin required for use with Flask-Login
@@ -68,7 +104,7 @@ class User(UserMixin, db.Model):
                 followers.c.follower_id == self.id)
         # Run another query on the database for posts written
         # by the user and join it to followed
-        own = Post.query.filter_by(user_id=self.id)    
+        own = Post.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Post.timestamp.desc())
     
     def get_reset_password_token(self, expires_in=600):
@@ -91,18 +127,21 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
-class Post(db.Model):
+class Post(SearchableMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     language = db.Column(db.String(5))
 
+    __searchable__ = ['body']
+
     def __repr__(self):
         return '<post {}>'.format(self.body)
 
-# association table without any other attributes other than foreign keys
-# no need to create a model out of it
+db.event.listen(db.session, 'before_commit', Post.before_commit)
+db.event.listen(db.session, 'after_commit', Post.after_commit)
+
 
 # Flask-Login requires a user_loader function to work because
 # it doesn't do anything with databases.

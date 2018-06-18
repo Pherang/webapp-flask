@@ -7,7 +7,7 @@ from flask_babel import _, get_locale
 from app import db
 # Imports the LoginForm class from the app/forms.py module
 # app is the package folder
-from app.main.forms import EditProfileForm, PostForm
+from app.main.forms import EditProfileForm, PostForm, SearchForm
 
 # required to handle logins and sessions for our login view function
 from flask_login import current_user, login_user, logout_user, login_required
@@ -24,10 +24,11 @@ from app.main import bp
 def before_request():
     # a reference to current_user will open a session to the database.
     # which is why db.session.add() isn't here.
-    g.locale = str(get_locale())
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
+        g.search_form = SearchForm()
+    g.locale = str(get_locale())
 
 @bp.route('/', methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])
@@ -144,3 +145,18 @@ def translate_text():
     return jsonify({ 'text':translate(request.form['text'],
                                       request.form['source_language'],
                                       request.form['dest_language'])})
+
+@bp.route('/search')
+@login_required
+def search():
+    if not g.search_form.validate():
+        return redirect(url_for('main.explore'))
+    page = request.args.get('page', 1, type=int)
+    posts, total = Post.search(g.search_form.q.data, page,
+                                current_app.config['POSTS_PER_PAGE'])
+    next_url = url_for('main.search', q=g.search_form.q.data, page=page + 1) \
+        if total > page * current_app.config['POSTS_PER_PAGE'] else None
+    prev_url = url_for('main.search', q=g.search_form.q.data, page=page - 1) \
+        if page > 1 else None
+    return render_template('search.html', title=_('Search'), posts=posts,
+                            next_ur=next_url, prev_url=prev_url)
