@@ -106,7 +106,7 @@ def follow(username):
     current_user.follow(user)
     db.session.commit()
     flash('You are following {}!'.format(username))
-    return redirect(url_for('auth.user', username=username))
+    return redirect(url_for('main.user', username=username))
 
 @bp.route('/unfollow/<username>')
 @login_required
@@ -123,7 +123,7 @@ def unfollow(username):
     current_user.unfollow(user)
     db.session.commit()
     flash('You are not following {}!'.format(username))
-    return redirect(url_for('auth.user', username=username))
+    return redirect(url_for('main.user', username=username))
 
 @bp.route('/explore')
 @login_required
@@ -160,3 +160,9 @@ def search():
         if page > 1 else None
     return render_template('search.html', title=_('Search'), posts=posts,
                             next_ur=next_url, prev_url=prev_url)
+
+@bp.route('/user/<username>/popup')
+@login_required
+def user_popup(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('user_popup.html', user=user)
