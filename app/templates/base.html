@@ -90,6 +90,7 @@
                       container: elem,
                       content: data,
                     }).popover('show')
+                    // Required for Flask-Moment to render time from ajax call. 
                     flask_moment_render_all()
                   }
             )
