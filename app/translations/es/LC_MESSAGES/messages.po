@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-06-06 08:21-0400\n"
+"POT-Creation-Date: 2018-06-20 17:12-0400\n"
 "PO-Revision-Date: 2018-06-04 23:19-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -18,6 +18,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.6.0\n"
 
+#: app/__init__.py:25
+msgid "Please log in to access this page"
+msgstr ""
+
 #: app/translate.py:11
 msgid "Error: the translation service is not configured."
 msgstr ""
@@ -26,20 +30,100 @@ msgstr ""
 msgid "Error: the translation service failed."
 msgstr ""
 
-#: app/templates/404.html:4
-msgid "File Not Found"
+#: app/main/forms.py:37 app/main/routes.py:161
+msgid "Search"
 msgstr ""
 
-#: app/templates/_post.html:22
+#: app/main/forms.py:47
+msgid "Message"
+msgstr ""
+
+#: app/main/forms.py:49
+msgid "Submit"
+msgstr ""
+
+#: app/main/routes.py:174
+msgid "Your message has been sent."
+msgstr ""
+
+#: app/main/routes.py:176
+msgid "Send Message"
+msgstr ""
+
+#: app/templates/_post.html:16
+#, python-format
+msgid "%(username)s said %(when)s"
+msgstr ""
+
+#: app/templates/_post.html:28
 msgid "Translate"
 msgstr ""
 
-#: app/templates/base.html:72
+#: app/templates/base.html:47 app/templates/messages.html:4
+msgid "Messages"
+msgstr ""
+
+#: app/templates/base.html:130
 msgid "Error: Could not contact server."
 msgstr ""
 
 #: app/templates/index.html:5
 #, python-format
 msgid "Hello, %(username)s!"
+msgstr ""
+
+#: app/templates/messages.html:12
+msgid "Newer messages"
+msgstr ""
+
+#: app/templates/messages.html:16
+msgid "Older messages"
+msgstr ""
+
+#: app/templates/search.html:4
+msgid "Search Results"
+msgstr ""
+
+#: app/templates/search.html:13
+msgid "Previous results"
+msgstr ""
+
+#: app/templates/search.html:19
+msgid "Next results"
+msgstr ""
+
+#: app/templates/send_message.html:5
+#, python-format
+msgid "Send Message to %(recipient)s"
+msgstr ""
+
+#: app/templates/user.html:28
+msgid "Send private message"
+msgstr ""
+
+#: app/templates/user_popup.html:15
+msgid "Last seen on"
+msgstr ""
+
+#: app/templates/user_popup.html:18
+#, python-format
+msgid "%(count)d followers"
+msgstr ""
+
+#: app/templates/user_popup.html:19
+#, python-format
+msgid "%(count)d following"
+msgstr ""
+
+#: app/templates/user_popup.html:23
+msgid "Follow"
+msgstr ""
+
+#: app/templates/user_popup.html:27
+msgid "Unfollow"
+msgstr ""
+
+#: app/templates/errors/404.html:4
+msgid "File Not Found"
 msgstr ""
 

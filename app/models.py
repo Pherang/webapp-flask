@@ -1,13 +1,15 @@
-from app import db, login
+from hashlib import md5
+import json
+from time import time
 from datetime import datetime
+
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from hashlib import md5
-from time import time
-import jwt
 from flask import current_app
-from app.search import add_to_index, remove_from_index, query_index
+import jwt
 
+from app.search import add_to_index, remove_from_index, query_index
+from app import db, login
 # User clas inherits from the SQLAlchemy.Model class and 
 
 followers = db.Table('followers', 
@@ -59,7 +61,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
-
+    last_message_read_time = db.Column(db.DateTime)
     # An inconcsistency with SQLAlchemy is that
     # in the db.relationship() call the model is referenced by Post, the name of the class representing the table
     # in the db.ForeignKey() call in Post, the table user.id is referenced by its actual table name user,
@@ -73,7 +75,18 @@ class User(UserMixin, db.Model):
         primaryjoin=(followers.c.follower_id == id), # join the User parent class to the table
         secondaryjoin=(followers.c.followed_id == id), # links right-side 'User' in this call to the table
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic') # how this relationship is accessed from the right/followed side
-    
+
+    messages_sent = db.relationship('Message', 
+                                    foreign_keys='Message.sender_id',
+                                    backref='author', lazy='dynamic')
+
+    messages_received = db.relationship('Message', 
+                                    foreign_keys='Message.recipient_id',
+                                    backref='recipient', lazy='dynamic')
+
+    notifications = db.relationship('Notification', backref='user',
+                                    lazy='dynamic')
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -113,6 +126,17 @@ class User(UserMixin, db.Model):
             {'reset_password': self.id, 'exp': time() + expires_in},
             current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
 
+    def new_messages(self):
+        last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
+        return Message.query.filter_by(recipient=self).filter(
+                Message.timestamp > last_read_time).count()
+
+    def add_notification(self, name, data):
+        self.notifications.filter_by(name=name).delete()
+        n = Notification(name=name, payload_json=json.dumps(data), user=self)
+        db.session.add(n)
+        return n
+
     @staticmethod
     def verify_reset_password_token(token):
         try:
@@ -139,12 +163,32 @@ class Post(SearchableMixin, db.Model):
     def __repr__(self):
         return '<post {}>'.format(self.body)
 
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    body = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Message {}>'.format(self.body)
+
 db.event.listen(db.session, 'before_commit', Post.before_commit)
 db.event.listen(db.session, 'after_commit', Post.after_commit)
 
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    timestamp = db.Column(db.Float, index=True, default=time)
+    payload_json = db.Column(db.Text)
 
+    def get_data(self):
+        return json.loads(str(self.payload_json))
+
+    
 # Flask-Login requires a user_loader function to work because
-# it doesn't do anything with databases.
+# Flask-Login doesn't interact with databases.
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
