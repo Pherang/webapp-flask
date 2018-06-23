@@ -4,7 +4,6 @@ isort==4.3.4
 keyutils==0.5
 lazy-object-proxy==1.3.1
 mccabe==0.6.1
-mugshot==0.3.2
 npyscreen==4.10.5
 packaging==16.8
 pacman-mirrors==4.7.6
