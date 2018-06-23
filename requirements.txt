@@ -1,6 +1,5 @@
 appdirs==1.4.3
 astroid==1.6.4
-catfish>=0.0.0
 docopt==0.6.2
 gufw==18.4.0
 isort==4.3.4
