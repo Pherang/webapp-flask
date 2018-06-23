@@ -12,6 +12,8 @@ from elasticsearch import Elasticsearch
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
+from redis import Redis
+import rq
 
 # Setup Flask Mail
 mail = Mail()
@@ -35,12 +37,16 @@ moment = Moment()
 babel = Babel()
 
 
+
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
     app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
         if app.config['ELASTICSEARCH_URL'] else None
+
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
+    app.task_queue = rq.Queue('microblog-tasks', connection=app.redis)
 
     db.init_app(app)
     migrate.init_app(app, db)

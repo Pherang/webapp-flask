@@ -7,3 +7,5 @@ initcontext.sh
 appvars.txt
 .env
 test.log
+startservices.sh
+stopservices.sh
