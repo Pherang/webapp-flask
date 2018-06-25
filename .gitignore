@@ -9,3 +9,6 @@ appvars.txt
 test.log
 startservices.sh
 stopservices.sh
+createtask.sql
+modules
+requirements.txt.bak
