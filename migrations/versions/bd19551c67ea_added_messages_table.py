@@ -1,4 +1,4 @@
-"""empty message
+"""added messages table
 
 Revision ID: bd19551c67ea
 Revises: d302cadc4a96

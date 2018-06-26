@@ -1,4 +1,4 @@
-"""empty message
+"""increased email field length
 
 Revision ID: d302cadc4a96
 Revises: a8e8c1055d8d
